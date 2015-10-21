@@ -8,8 +8,8 @@ import os.path
 #Make connection to SAPserver
 server = SAPserver()
 
-
 #######################################################################
+
 def get_missing_roles(sbml_file):
 
     #Check that the file exists
@@ -26,20 +26,12 @@ def get_missing_roles(sbml_file):
     else:
         print "The SBML file " + sbml_file + " was successfully read."
 
-    #Create a model from the SBML file that was read
+    #Get the model object from the SBML file that was read
     model = doc.getModel()
 
-    #Print pertinent information about the model
-    print ("\nMODEL INFO:\n")
-    print("       # of compartments: " + str(model.getNumCompartments()) )
-    print("          # of reactions: " + str(model.getNumReactions()) )
-    print("          # of compounds: " + str(model.getNumSpecies()) )
-
-
     #Get all the reactions present in the model
-    rxns = []
     rxns = model.getListOfReactions()
-    #Get the IDs for each reaction
+    #Get the IDs for the reactions
     r_ids = []
     for r in rxns:
         r_id = r.getId()
@@ -47,46 +39,23 @@ def get_missing_roles(sbml_file):
         r_id = r_id.replace("_e0", "")
         r_ids.append(r_id)
 
-
-    #Find which functional roles are present based upon the reactions present
+    #Get the functional roles that are present based upon the reactions present
     roles_pres = server.reactions_to_roles({"-ids":r_ids})
-    #Pull just the values from the dictionary -- each value is a list of roles
-    roles = roles_pres.values()
-    #Create a new list in which to combine the many lists of roles returned by
-    # the reactions_to_roles() function above
-    all_roles_pres = []
-    
-    #Combine all the lists together into one list
-    for r in roles:
-        all_roles_pres.extend(r)
+    roles_pres = roles_pres.values()
+    all_roles_pres = [role for l in roles_pres for role in l]
     print("\n\n# OF FUNCTIONAL ROLES PRESENT: " + str(len(set(all_roles_pres))))
     
-    
-
-
-    #Find which subsystems are present based upon the functional roles present
+    #Get the subsystems that are present based upon the functional roles present
     subs_pres = server.subsystems_for_role({"-ids":list(all_roles_pres)})
-    #Pull just the values from the dictionary -- each value is a list of subsystems
     subs = subs_pres.values()
-    #Create a new list in which to combine the many lists of subsystems
-    # returned by the roles_to_subsystems() function above
-    all_subs = []
-    #Combine all the lists together into one
-    for s in subs:
-        all_subs.extend(s)
+    all_subs = [s for l in subs for s in l]
     print("\n\n# OF SUBSYSTEMS PRESENT IN THE MODEL: " + str(len(set(all_subs))))
 
 
     #Find all roles that should be present in every subsystem represented in the model
     roles_theor = server.subsystem_roles({"-ids": list(all_subs)})
-    #Pull just the values from the dictionary -- each value is a list of subsystems
     r_theor = roles_theor.values()
-    #Create a new list in which to combine the many lists of subsystems
-    # returned by the roles_to_subsystems() function above
-    all_r_theor = []
-    #Combine all the lists together into one
-    for r in r_theor:
-        all_r_theor.extend(r)
+    all_r_theor = [r for l in r_theor for r in l]
     print("\n\nNumber of theoretical roles: " + str(len(set(all_r_theor))) + "\n")
 
 
