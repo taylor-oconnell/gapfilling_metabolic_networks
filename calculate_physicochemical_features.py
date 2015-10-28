@@ -51,7 +51,25 @@ def calculate_MW(prot_ids, prot_seqs):
 
 #################################################################################
     
+def calculate_secondary_structure_fraction(prot_ids, prot_seqs):
 
+    """
+    This function takes a list of protein ids and a list of corresponding
+    protein sequences and calculates the secondary structure fraction
+    (%helix, %turn, %sheet) of each protein.  It returns a dictionary with
+    the protein ids as the keys and tuples of the form (%helix, %turn, %sheet)
+    as the values.
+
+    """
+
+    secondary_structure_fractions = {}
+
+    for i in xrange(len(prot_seqs)):
+        p = ProtParam.ProteinAnalysis(prot_seqs[i])
+        ssf = p.secondary_structure_fraction()
+        secondary_structure_fractions[prot_ids[i]] = ssf
+
+    return secondary_structure_fractions
 
 
 ########################################################################
@@ -64,5 +82,8 @@ if __name__ == '__main__':
 
     MWs = calculate_MW([1,2,3],['AAAA','DDDD','RRRR'])
     print MWs
+
+    ssf = calculate_secondary_structure_fraction([1,2,3],['AAAA','DDDD','RRRR'])
+    print ssf
 
         
