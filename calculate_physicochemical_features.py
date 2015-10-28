@@ -1,4 +1,4 @@
-import Bio
+from Bio.SeqUtils import ProtParam
 import sys
 sys.path.append('/Users/Taylor/Desktop/python scripts/')
 from servers.SAP import SAPserver
@@ -22,9 +22,9 @@ def calculate_pI(prot_ids, prot_seqs):
     isoelectric_points = {}
     
     for i in xrange(len(prot_seqs)):
-        p = ProteinAnalysis(prot_seqs(i))
+        p = ProtParam.ProteinAnalysis(prot_seqs[i])
         pI = p.isoelectric_point()
-        isoelectric_points[prot_ids(i)] = pI
+        isoelectric_points[prot_ids[i]] = pI
 
     return isoelectric_points
 
@@ -43,9 +43,9 @@ def calculate_MW(prot_ids, prot_seqs):
     molec_weights = {}
 
     for i in xrange(len(prot_seqs)):
-        p = ProteinAnalysis(prot_seqs(i))
+        p = ProtParam.ProteinAnalysis(prot_seqs[i])
         mw = p.molecular_weight()
-        molec_weights[prot_ids(i)] = mw
+        molec_weights[prot_ids[i]] = mw
 
     return molec_weights
 
@@ -53,5 +53,16 @@ def calculate_MW(prot_ids, prot_seqs):
     
 
 
+
+########################################################################
+########################################################################
+
+if __name__ == '__main__':
+    
+    pIs = calculate_pI([1,2,3],['AAAA','DDDD','RRRR'])
+    print pIs
+
+    MWs = calculate_MW([1,2,3],['AAAA','DDDD','RRRR'])
+    print MWs
 
         
