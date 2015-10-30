@@ -71,9 +71,37 @@ def calculate_secondary_structure_fraction(prot_ids, prot_seqs):
 
     return secondary_structure_fractions
 
+#################################################################################
 
-########################################################################
-########################################################################
+def calculate_aa_composition(prots):
+
+    """
+    This function takes a dictionary input where the keys are protein ids and the
+    values are the corresponding protein sequences.  THe function calculates the
+    secondary structure fraction (%helix, %turn, %sheet) of each protein.  It
+    returns a dictionary with the protein ids as the keys and dictionaries of
+    amino acid fractions as the values.
+
+    """
+
+
+    prot_ids = prots.keys()
+    prot_seqs = prots.values()
+
+    aa_composition = {}
+
+    for i in xrange(len(prot_seqs)):
+        p = ProtParam.ProteinAnalysis(prot_seqs[i])
+        aa_comp = p.get_amino_acids_percent()
+        aa_composition[prot_ids[i]] = aa_comp
+
+    return aa_composition
+
+
+
+
+#################################################################################
+#################################################################################
 
 if __name__ == '__main__':
     
@@ -85,5 +113,8 @@ if __name__ == '__main__':
 
     ssf = calculate_secondary_structure_fraction([1,2,3],['AAAA','DDDD','RRRR'])
     print ssf
+
+    aac = calculate_aa_composition({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
+    print aac
 
         
