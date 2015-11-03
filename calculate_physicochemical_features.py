@@ -7,18 +7,20 @@ from servers.SAP import SAPserver
 server = SAPserver()
 
 
-##############################################################################
+##################################################################################
 
-def calculate_pI(prot_ids, prot_seqs):
+def calculate_pI(prots):
     
     """
-    This function takes a list of protein ids and a list of coresponding
-    protein sequences and calculates the isoelectric point of each protein.
-    It returns a dictionary with the protein ids as the keys and their
-    respective isoelectric points as the values.
+    This function takes a dictionary input where the keys are protein ids and
+    the values are the corresponding protein sequences. The function calculates
+    the isoelectric point of each protein and returns a dictionary with the
+    protein ids as the keys and their respective isoelectric points as the values.
 
     """
-
+    
+    prot_ids, prot_seqs = zip(*prots.items())
+    
     isoelectric_points = {}
     
     for i in xrange(len(prot_seqs)):
@@ -28,18 +30,20 @@ def calculate_pI(prot_ids, prot_seqs):
 
     return isoelectric_points
 
-################################################################################
+###################################################################################
 
-def calculate_MW(prot_ids, prot_seqs):
-
-    """
-    This function takes a list of protein ids and a list of corresponding
-    protein sequences and calculates the isoelectric point of each protein.
-    It returns a dictionary with the protein ids as the keys and their
-    respective isoelectric points as the values.
+def calculate_MW(prots):
 
     """
+    This function takes a dictionary input where the keys are protein ids and
+    the values are the corresponding protein sequences. The function calculates
+    the isoelectric point of each protein and returns a dictionary with the
+    protein ids as the keys and their respective isoelectric points as the values.
 
+    """
+    
+    prot_ids, prot_seqs = zip(*prots.items())
+    
     molec_weights = {}
 
     for i in xrange(len(prot_seqs)):
@@ -49,19 +53,21 @@ def calculate_MW(prot_ids, prot_seqs):
 
     return molec_weights
 
-#################################################################################
+####################################################################################
     
-def calculate_secondary_structure_fraction(prot_ids, prot_seqs):
+def calculate_secondary_structure_fraction(prots):
 
     """
-    This function takes a list of protein ids and a list of corresponding
-    protein sequences and calculates the secondary structure fraction
-    (%helix, %turn, %sheet) of each protein.  It returns a dictionary with
-    the protein ids as the keys and tuples of the form (%helix, %turn, %sheet)
-    as the values.
+    This function takes a dictionary input where the keys are protein ids and the
+    values are the corresponding protein sequences. The function calculates the
+    secondary structure fraction (%helix, %turn, %sheet) of each protein and
+    returns a dictionary with the protein ids as the keys and tuples of the form
+    (%helix, %turn, %sheet) as the values.
 
     """
 
+    prot_ids, prot_seqs = zip(*prots.items())
+    
     secondary_structure_fractions = {}
 
     for i in xrange(len(prot_seqs)):
@@ -71,22 +77,21 @@ def calculate_secondary_structure_fraction(prot_ids, prot_seqs):
 
     return secondary_structure_fractions
 
-#################################################################################
+####################################################################################
 
 def calculate_aa_composition(prots):
 
     """
     This function takes a dictionary input where the keys are protein ids and the
-    values are the corresponding protein sequences.  THe function calculates the
+    values are the corresponding protein sequences.  The function calculates the
     secondary structure fraction (%helix, %turn, %sheet) of each protein.  It
     returns a dictionary with the protein ids as the keys and dictionaries of
     amino acid fractions as the values.
 
     """
 
-
-    prot_ids = prots.keys()
-    prot_seqs = prots.values()
+    prot_ids, prot_seqs = zip(*prots.items())
+     
 
     aa_composition = {}
 
@@ -100,18 +105,18 @@ def calculate_aa_composition(prots):
 
 
 
-#################################################################################
-#################################################################################
+####################################################################################
+####################################################################################
 
 if __name__ == '__main__':
     
-    pIs = calculate_pI([1,2,3],['AAAA','DDDD','RRRR'])
+    pIs = calculate_pI({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print pIs
 
-    MWs = calculate_MW([1,2,3],['AAAA','DDDD','RRRR'])
+    MWs = calculate_MW({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print MWs
 
-    ssf = calculate_secondary_structure_fraction([1,2,3],['AAAA','DDDD','RRRR'])
+    ssf = calculate_secondary_structure_fraction({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print ssf
 
     aac = calculate_aa_composition({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
