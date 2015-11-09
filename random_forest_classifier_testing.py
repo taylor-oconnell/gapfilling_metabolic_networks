@@ -21,16 +21,19 @@ X, Y = shuffle(X, Y, random_state=0)
 
 
 # Fit random forest classifier to training data
-rf_clf = RandomForestClassifier()
+rf_clf = RandomForestClassifier(n_estimators=1000)
 rf_clf = rf_clf.fit(X[:100],Y[:100])
 
 
 # make predictions on test data
 predictions = rf_clf.predict(X[100:])
+prediction_probs = rf_clf.predict_proba(X[100:])
 
 #Print the predictions and print the actual class labels
 print "Predictions:"
 print predictions
+print "\nPrediction class probabilities:"
+print prediction_probs
 print "\nActual class labels:"
 print Y[100:]
 
