@@ -29,11 +29,14 @@ rf_clf = rf_clf.fit(X[:100],Y[:100])
 predictions = rf_clf.predict(X[100:])
 prediction_probs = rf_clf.predict_proba(X[100:])
 
-#Print the predictions and print the actual class labels
+#Print the class label predictions
 print "Predictions:"
 print predictions
+#Print the probabilities for the class label predictions
 print "\nPrediction class probabilities:"
 print prediction_probs
+
+#Print the actual class labels
 print "\nActual class labels:"
 print Y[100:]
 
