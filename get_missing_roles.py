@@ -74,5 +74,8 @@ def get_missing_roles(sbml_file):
 #######################################################################################
 
 missing_roles = get_missing_roles("Opt224308.1.xml")
+
+for i in range(10):
+    print missing_roles[i]
     
     
