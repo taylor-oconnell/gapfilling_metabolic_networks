@@ -112,14 +112,18 @@ if __name__ == '__main__':
     
     pIs = calculate_pI({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print pIs
+    print "\n\n"
 
     MWs = calculate_MW({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print MWs
+    print "\n\n"
 
     ssf = calculate_secondary_structure_fraction({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print ssf
+    print "\n\n"
 
     aac = calculate_aa_composition({'id1':'AAAA', 'id2':'DDDD', 'id3':'RRRR'})
     print aac
+    print "\n\n"
 
         
