@@ -53,6 +53,20 @@ def get_prot_seqs(pegs):
     return seqs
 
 #############################################################################
+
+
+def get_roles_for_prots(pegs):
+
+    """
+    This function takes a list of feature ids as an input and returns a
+    dictionary that has feature ids as the keys and their corresponding roles
+    as the values.
+    """
+
+    seqs = server.ids_to_functions({'-ids':pegs, '-genome': '83333.1'})
+    return seqs
+
+#############################################################################
 #############################################################################
 
 
@@ -81,6 +95,9 @@ if __name__ == '__main__':
     protSeqs = prot_seqs.items()
     for i in range(10):
         print protSeqs[i]
+
+    prot_roles = get_roles_for_prots(pegs_nh)
+    print prot_roles
     
 
 
