@@ -4,7 +4,6 @@ sys.path.append('/Users/Taylor/Desktop/python scripts/')
 from servers.SAP import SAPserver
 import libsbml
 import os.path
-import hashlib
 
 
 #Make connection by instantiating SAPserver
@@ -161,8 +160,6 @@ def get_prots_for_roles(roles_list):
 def get_seqs_for_roles(roles_and_md5s):
 
     #print roles_and_md5s
-    
-    m = hashlib.md5()
 
     # Extract the protein md5s into list to find their fids
     prot_ids = roles_and_md5s.values()
