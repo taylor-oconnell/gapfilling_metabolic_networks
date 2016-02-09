@@ -278,19 +278,24 @@ if __name__ == '__main__':
     
     # get the protein sequences for the missing roles
     roles_and_seqs = get_seqs_for_roles(md5s_for_missing_roles)
-    print roles_and_seqs
+    #print roles_and_seqs
     print "length of roles_and_seqs: " + str(len(roles_and_seqs))
     
 
     # reality checks
-    if len(missing_roles) == len(md5s_for_missing_roles) == len(roles_and_seqs):
+    if len(missing_roles) == len(md5s_for_missing_roles):
         print "\nOK1"
     if len(md5s_for_missing_roles) == len(roles_and_seqs):
         print "\nOK2"
+    else:
+        print "ALERT!  Some missing roles have no prot seqs."
         
     for i in range(5):
-        if len(md5s_for_missing_roles[missing_roles[i]])==len(roles_and_seqs[missing_roles[i]]):
-            print "OK3"
+        if missing_roles[i] in roles_and_seqs:
+            if len(md5s_for_missing_roles[missing_roles[i]])==len(roles_and_seqs[missing_roles[i]]):
+                print "OK3"
+        else:
+            print "ALERT!  " + str(missing_roles[i]) + " does not have any associated protein sequences."
 
         
     
