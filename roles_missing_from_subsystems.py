@@ -160,7 +160,7 @@ def get_prots_for_roles(roles_list):
 
 def get_seqs_for_roles(roles_and_md5s):
 
-    print roles_and_md5s
+    #print roles_and_md5s
     
     m = hashlib.md5()
 
@@ -181,7 +181,7 @@ def get_seqs_for_roles(roles_and_md5s):
     # Get the protein sequences for the fids
     fids = md5_and_fid.values()      
     fids_and_seqs = server.fids_to_proteins({"-ids":fids, "-sequence":1})
-    print fids_and_seqs
+    #print fids_and_seqs
 
     # Map the sequences to the md5s using the fids
     md5s_and_seqs = {}
@@ -189,7 +189,7 @@ def get_seqs_for_roles(roles_and_md5s):
         for key2 in md5_and_fid:
             if key1 == md5_and_fid[key2]:
                 md5s_and_seqs[key2] = fids_and_seqs[key1]
-    print md5s_and_seqs
+    #print md5s_and_seqs
                 
     
     """
@@ -262,12 +262,13 @@ if __name__ == '__main__':
 
     # find which roles are possibly missing
     missing_roles = get_missing_roles(roles)
-    print "\n" + str(missing_roles[0])
+    missing_roles = missing_roles[0:5]
+    print "length of missing_roles: " + str(len(missing_roles))
     
     
     # get the protein IDs associated with the missing roles
-    md5s_for_missing_roles = get_prots_for_roles(missing_roles[0])
-    #print md5s_for_missing_roles
+    md5s_for_missing_roles = get_prots_for_roles(missing_roles)
+    print "length of md5s_for_missing_roles: " + str(len(md5s_for_missing_roles))
 
     #prot_ids = ids_for_missing_roles.values()
     #prot_ids = [ID for l in prot_ids for ID in l]
@@ -278,16 +279,20 @@ if __name__ == '__main__':
     # get the protein sequences for the missing roles
     roles_and_seqs = get_seqs_for_roles(md5s_for_missing_roles)
     print roles_and_seqs
+    print "length of roles_and_seqs: " + str(len(roles_and_seqs))
+    
 
     # reality checks
-    if len([missing_roles[0]]) == len(md5s_for_missing_roles):
+    if len(missing_roles) == len(md5s_for_missing_roles) == len(roles_and_seqs):
         print "\nOK1"
+    if len(md5s_for_missing_roles) == len(roles_and_seqs):
+        print "\nOK2"
+        
+    for i in range(5):
+        if len(md5s_for_missing_roles[missing_roles[i]])==len(roles_and_seqs[missing_roles[i]]):
+            print "OK3"
 
-    if len(md5s_for_missing_roles)==len(roles_and_seqs):
-        print "OK2"
-
-    if len(md5s_for_missing_roles.values()) == len(roles_and_seqs.values()):
-        print "OK3"
+        
     
     
     """
