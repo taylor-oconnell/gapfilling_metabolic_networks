@@ -25,7 +25,7 @@ def get_pegs(genomeID):
 def get_nonhypothetical_pegs(genomeID):
 
     pegs = server.feature_assignments({'-genome':genomeID, '-type':'peg', '-hypothetical':0})
-    pegs = pegs.keys()
+    #pegs = pegs.keys()
 
     return pegs
 
@@ -34,7 +34,7 @@ def get_nonhypothetical_pegs(genomeID):
 def get_hypothetical_pegs(genomeID):
 
     pegs = server.feature_assignments({'-genome':genomeID, '-type':'peg', '-hypothetical':1})
-    pegs = pegs.keys()
+    #pegs = pegs.keys()
 
     return pegs
 
@@ -62,7 +62,7 @@ def get_roles_for_prots(pegs):
     dictionary that has feature ids as the keys and their corresponding roles
     as the values.
     """
-
+    pegs = pegs.values()
     seqs = server.ids_to_functions({'-ids':pegs, '-genome': '83333.1'})
     return seqs
 
@@ -81,13 +81,18 @@ if __name__ == '__main__':
     pegs_nh = get_nonhypothetical_pegs('83333.1')
     print "# of non-hypothetical pegs in genome: " + str(len(pegs_nh)) + "\n"
 
-    pegs_h = get_hypothetical_pegs('83333.1')
-    print "# of hypothetical pegs in genome: " + str(len(pegs_h)) + "\n"
-
-    if len(pegs_nh) + len(pegs_h) == len(pegs):
-        print "OK. Things are adding up properly."
-    else:
-        print "ALERT: # of hypothetical pegs and # of non-hypothetical pegs do not sum to the # of total pegs."
+    fids, funcs = zip(*pegs_nh.items())
+    for i in range(10):
+        print fids[i] + "\t\t" + funcs[i]
+    
+    #pegs_h = get_hypothetical_pegs('83333.1')
+    #print "# of hypothetical pegs in genome: " + str(len(pegs_h)) + "\n"
+    #print pegs_h
+    
+    #if len(pegs_nh) + len(pegs_h) == len(pegs):
+        #print "OK. Things are adding up properly."
+    #else:
+        #print "ALERT: # of hypothetical pegs and # of non-hypothetical pegs do not sum to the # of total pegs."
     
 
     prot_seqs = get_prot_seqs(pegs)
