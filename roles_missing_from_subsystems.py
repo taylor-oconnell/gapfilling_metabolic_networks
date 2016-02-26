@@ -1,9 +1,9 @@
 
 import sys
-#sys.path.append('/Users/Taylor/Desktop/python scripts/')
+import os.path
 from servers.SAP import SAPserver
 import libsbml
-import os.path
+
 
 
 #Make connection by instantiating SAPserver
@@ -36,7 +36,7 @@ def file_to_model(sbml_file):
     else:
         print "The SBML file " + sbml_file + " was successfully read."
 
-    return doc;
+    return doc
 
 
 
@@ -64,7 +64,7 @@ def get_reactions(sbml_model):
         r_id = r_id.replace("_e0", "")
         r_ids.append(r_id)
 
-    return r_ids;
+    return r_ids
 
 
 
@@ -88,7 +88,7 @@ def get_compounds(sbml_model):
     #Get the IDs for each compound
     cmpd_ids = [c.getId() for c in cmpds]
 
-    return cmpd_ids;
+    return cmpd_ids
 
 
 
@@ -101,34 +101,52 @@ def get_roles(r_ids):
     roles_pres = server.reactions_to_roles({"-ids":r_ids})
     roles = roles_pres.values()
     all_roles_pres = [r for l in roles for r in l]
-    print("\n\nNumber of functional roles present in the model: " + str(len(set(all_roles_pres))))
-
-    return all_roles_pres;
-
-
-
-#################################################################################
     
+    # Get rid of duplicates in list of roles
+    all_roles_pres = set(all_roles_pres)
+    print("\n\nNumber of functional roles present in the model: " + str(len(all_roles_pres)))
 
-def get_missing_roles(all_roles_present):
+    return all_roles_pres
 
-    #Find which subsystems are present based upon the functional roles present
+
+################################################################################
+
+
+def get_subsystems(all_roles_present):
+
+    # Find which subsystems are present in the model based upon the functional
+    # roles present
     subs_pres = server.subsystems_for_role({"-ids":list(all_roles_present)})
     subs = subs_pres.values()
     all_subs = [s for l in subs for s in l]
+    
+    # Remove duplicates of subsystems in the list by making a set out of the list
+    all_subs = set(all_subs)
 
-    print("\nNumber of subsystems present in the model: " + str(len(set(all_subs))))
+    #print("\nNumber of subsystems present in the model: " + str(len(set(all_subs))))
     #print all_subs
 
-    #Find all roles that should be present in every subsystem represented in the model
-    roles_theor = server.subsystem_roles({"-ids": list(all_subs)})
-    r_theor = roles_theor.values()
+    # Find the list of roles associated with each subsystem represented in the model.
+    # (These are roles that we should possibly have in the model.)
+    subs_and_roles = server.subsystem_roles({"-ids": list(all_subs)})
+
+    return subs_and_roles
+    
+
+
+
+##################################################################################
+    
+
+def get_missing_roles(subs_and_roles, all_roles_present):
+
+    r_theor = subs_and_roles.values()
     all_r_theor = [role for l in r_theor for role in l]
 
-    print("\nNumber of theoretical roles: " + str(len(set(all_r_theor))) + "\n")
+    #print("\nNumber of theoretical roles: " + str(len(set(all_r_theor))) + "\n")
     #print all_r_theor
     
-    #Use set() to get rid of duplicates of roles in the list of roles and list
+    # Use set() to get rid of duplicates of roles in the list of roles and list
     # of theoretical roles and subtract the set of roles we know we have
     # from the set of theoretical roles
     missing_roles = list(set(all_r_theor) - set(all_roles_present))
@@ -137,7 +155,7 @@ def get_missing_roles(all_roles_present):
     #print("\nMISSING ROLES:\n")
     #print(missing_roles)
 
-    return missing_roles;
+    return missing_roles
 
 
 #################################################################################
@@ -163,15 +181,14 @@ def get_seqs_for_roles(roles_and_md5s):
 
     #print roles_and_md5s
 
-    # Extract the protein md5s into list to find their fids
+    # Extract the protein md5s into a list
     prot_ids = roles_and_md5s.values()
     prot_ids = [ID for l in prot_ids for ID in l]
     
-    # Find the fids associated with each of the proteins from the missing
-    # functional roles
+    # Find the fids associated with each of the proteins (using the md5s)
     protIDs_and_fids = server.proteins_to_fids({"-prots":prot_ids})
     
-    # Loop through to eliminate the extra fids that code for the exact
+    # Loop through dictionary and eliminate the extra fids that code for the
     # same seqquence
     md5_and_fid = {}
     for key in protIDs_and_fids:
@@ -236,8 +253,12 @@ if __name__ == '__main__':
     # get the roles for reactions present
     roles = get_roles(rxns)
 
+    # get the subsystems represented in the model
+    subs = get_subsystems(roles)
+    print "number of subsystems: " + str(len(subs))
+
     # find which roles are possibly missing
-    missing_roles = get_missing_roles(roles)
+    missing_roles = get_missing_roles(subs, roles)
     missing_roles = missing_roles[0:25]
     print "length of missing_roles: " + str(len(missing_roles))
     
@@ -268,6 +289,8 @@ if __name__ == '__main__':
                 print "OK3"
         else:
             print "ALERT!  " + str(missing_roles[i]) + " does not have any associated protein sequences."
+
+    print roles_and_seqs
 
         
     
