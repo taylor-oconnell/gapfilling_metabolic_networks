@@ -241,22 +241,42 @@ if __name__ == '__main__':
 
     #read model
     model = file_to_model("Opt224308.1.xml")
-
+    
     # get the reactions present
     rxns = get_reactions(model)
     print("# of reactions: " + str(len(rxns)))
+    #fout_rxns = open('reactions_present.txt', 'w')
+    #for r in rxns:
+        #fout_rxns.write(r + "\n")
+    #fout_rxns.close()
+   
 
     # get the compounds present
     cmpds = get_compounds(model)
     print("# of compounds: " + str(len(cmpds)))
+    #fout_cmpds = open('compounds_present.txt', 'w')
+    #for c in cmpds:
+        #fout_cmpds.write(c + "\n")
+    #fout_cmpds.close()
+
 
     # get the roles for reactions present
     roles = get_roles(rxns)
+    #fout_roles = open('roles_present.txt', 'w')
+    #for r in roles:
+        #fout_roles.write(r + "\n")
+    #fout_roles.close()
+
 
     # get the subsystems represented in the model
     subs = get_subsystems(roles)
     print "number of subsystems: " + str(len(subs))
-
+    fout_subs = open('subsystems_present.txt', 'w')
+    for s in subs:
+        fout_subs.write(s + "\n")
+    fout_subs.close()
+    
+"""
     # find which roles are possibly missing
     missing_roles = get_missing_roles(subs, roles)
     missing_roles = missing_roles[0:25]
@@ -292,7 +312,7 @@ if __name__ == '__main__':
 
     print roles_and_seqs
 
-        
+"""       
     
     
 
