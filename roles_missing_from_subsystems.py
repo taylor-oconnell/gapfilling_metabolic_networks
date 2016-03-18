@@ -182,14 +182,16 @@ def get_seqs_for_roles(roles_and_md5s):
     #print roles_and_md5s
 
     # Extract the protein md5s into a list
-    prot_ids = roles_and_md5s.values()
-    prot_ids = [ID for l in prot_ids for ID in l]
+    md5s = roles_and_md5s.values()
+    md5s = [ID for l in md5s for ID in l]
+    print("# of md5s: " + str(len(md5s)))
     
     # Find the fids associated with each of the proteins (using the md5s)
-    protIDs_and_fids = server.proteins_to_fids({"-prots":prot_ids})
+    protIDs_and_fids = server.proteins_to_fids({"-prots":md5s})
+    print ("# of md5/fid pairs: " + str(len(protIDs_and_fids)))
     
     # Loop through dictionary and eliminate the extra fids that code for the
-    # same seqquence
+    # same sequence
     md5_and_fid = {}
     for key in protIDs_and_fids:
         new_val = protIDs_and_fids[key]
@@ -238,7 +240,7 @@ def get_seqs_for_roles(roles_and_md5s):
 ########################################################################
 
 if __name__ == '__main__':
-
+    """
     #read model
     model = file_to_model("Opt224308.1.xml")
     
@@ -271,29 +273,39 @@ if __name__ == '__main__':
     # get the subsystems represented in the model
     subs = get_subsystems(roles)
     print "number of subsystems: " + str(len(subs))
-    fout_subs = open('subsystems_present.txt', 'w')
-    for s in subs:
-        fout_subs.write(s + "\n")
-    fout_subs.close()
+    #fout_subs = open('subsystems_present.txt', 'w')
+    #for s in subs:
+        #fout_subs.write(s + "\n")
+    #fout_subs.close()
     
-"""
+
     # find which roles are possibly missing
     missing_roles = get_missing_roles(subs, roles)
-    missing_roles = missing_roles[0:25]
+    #missing_roles = missing_roles[0:25]
     print "length of missing_roles: " + str(len(missing_roles))
+    #fout_mr = open('missing_roles.txt', 'w')
+    #for m in missing_roles:
+        #fout_mr.write(m + "\n")
+    #fout_mr.close()
+    """
+    missing_roles = []
+    fin = open('missing_roles.txt', 'r')
+    for line in fin:
+        missing_roles.append(line.strip())
+    print("# of missing roles: " + str(len(missing_roles)))
     
-    
+
     # get the protein IDs associated with the missing roles
-    md5s_for_missing_roles = get_prots_for_roles(missing_roles)
+    md5s_for_missing_roles = get_prots_for_roles(missing_roles[:25])
     print "length of md5s_for_missing_roles: " + str(len(md5s_for_missing_roles))
-    
-    
+    print md5s_for_missing_roles
+      
     # get the protein sequences for the missing roles
     roles_and_seqs = get_seqs_for_roles(md5s_for_missing_roles)
     #print roles_and_seqs
     print "length of roles_and_seqs: " + str(len(roles_and_seqs))
     
-
+    """
     # reality checks
     if len(missing_roles) == len(md5s_for_missing_roles):
         print "\nOK1\n"
@@ -311,8 +323,8 @@ if __name__ == '__main__':
             print "ALERT!  " + str(missing_roles[i]) + " does not have any associated protein sequences."
 
     print roles_and_seqs
-
-"""       
+    """
+      
     
     
 
