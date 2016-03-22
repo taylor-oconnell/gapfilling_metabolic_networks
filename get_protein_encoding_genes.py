@@ -69,21 +69,6 @@ def get_prot_seqs(pegs):
 #############################################################################
 
 
-def get_roles_for_fids(pegs):
-
-    """
-    This function takes a list of feature ids as an input and returns a
-    dictionary that has feature ids as the keys and their corresponding roles
-    as the values.
-    """
-
-    fids_roles = server.ids_to_functions({'-ids':pegs, '-genome': '83333.1'})
-    return fids_roles
-
-
-#############################################################################
-
-
 def match_roles_and_seqs(fids_seqs, fids_roles):
 
     """
@@ -137,61 +122,28 @@ if __name__ == '__main__':
             print(r + "\t" + str(roles_fids[r]))
             count0 = count0 + 1
     print("# of roles with multiple fids: " + str(count0))
-    
-        
-        
-    """
-    # Get the non-hypothetical pegs
-    pegs_nh = get_nonhypothetical_pegs('83333.1')
-    print "# of non-hypothetical pegs in genome: " + str(len(pegs_nh)) + "\n"
 
-    fids, funcs = zip(*pegs_nh.items())
-    for i in range(10):
-        print fids[i] + "\t\t" + funcs[i]
 
-    # Get the hypothetical pegs
-    #pegs_h = get_hypothetical_pegs('83333.1')
-    #print "# of hypothetical pegs in genome: " + str(len(pegs_h)) + "\n"
-    #print pegs_h
-
-    # Check that the # of hypothetical pegs and the # of
-    # non-hypothetical pegs add to the total # of pegs
-    #if len(pegs_nh) + len(pegs_h) == len(pegs):
-        #print "OK. Things are adding up properly."
-    #else:
-        #print "ALERT: # of hypothetical pegs and # of non-hypothetical pegs do not sum to the # of total pegs."
-    
     
     # Get the protein sequences for each feature (gene) in the genome.
     prot_seqs = get_prot_seqs(fids)
     print "\n# of fids: " + str(len(prot_seqs.keys()))
     print "\n# of protein sequences: " + str(len(prot_seqs.values()))
     
-    fout_ps = open('pegs_and_seqs.txt', 'w')
-    for p in prot_seqs:
-        fout_ps.write(p + "\t" + prot_seqs[p] + "\n")
-    fout_ps.close()
+    #fout_ps = open('pegs_and_seqs.txt', 'w')
+    #for p in prot_seqs:
+        #fout_ps.write(p + "\t" + prot_seqs[p] + "\n")
+    #fout_ps.close()
     
     count1 = 0
     for i in prot_seqs.values():
         if i == []:
             count1 = count1 + 1
     print("# of fids with no prot sequence: " + str(count1))
-        
-    
-    # Get the functional role for each feature (gene) in the genome.
-    roles = get_roles_for_fids(fids)
-    print("# of fid/function pairs: " + str(len(roles)))
-    count2 = 0
-    for i in roles.values():
-        if i == "":
-            count2 = count2 + 1
-    print("# of fids with no function: " + str(count2))
-    
 
-    
-    
-    # Match the roles and sequences together
+        
+    """
+    # Match the roles and sequences together using fids
     roles_and_seqs = match_roles_and_seqs(prot_seqs, roles)
 
     print roles_and_seqs
