@@ -38,7 +38,7 @@ def regulon_evidence(genomeID, roles_and_fids, subs_and_fids, subs_and_roles)
                     
                     # If so, then add to the count
                     if f in fids_in_reg:
-                        count = count +1;
+                        count = count +1
 
         roles_and_reg_evidence[role] = count
                         
