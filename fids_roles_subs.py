@@ -12,18 +12,22 @@ for line in fin:
     fids.append(line.strip())
 fin.close()
 print("# of fids: " + str(len(fids)))
-    
 
+fout = open('role_peg_seq.2.txt', 'w')
+    
 feature_hash = server.ids_to_subsystems({"-ids": fids, "-genome": genomeID})
 roles_w_fids = []
 subs_w_fids = []
 for fid in feature_hash:
-    for l in feature_hash[fid]:
-        roles_w_fids.append(l[0])
-        subs_w_fids.append(l[1])
+    for lst in feature_hash[fid]:
+        roles_w_fids.append(lst[0])
+        subs_w_fids.append(lst[1])
+        fout.write(lst[1] + "\t" + fid + "\n")
+fout.close()
 
-print("# of roles that have fids associated: " + str(len(roles_w_fids)))
-print("# of subsystems that have fids associated: " + str(len(subs_w_fids)))
+print("length of feature hash: " + str(len(feature_hash)))
+print("# of roles that have fids associated: " + str(len(set(roles_w_fids))))
+print("# of subsystems that have fids associated: " + str(len(set(subs_w_fids))))
     
     
 
