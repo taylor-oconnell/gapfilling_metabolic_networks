@@ -54,6 +54,14 @@ for fid in feature_hash:
     
 fout.close()
 
+"""
+# Write out the roles present to a text file
+fout1 = open('roles_present.txt','w')
+for r in roles:
+fout1.write(r + "\n")
+fout1.close()
+"""
+
 # Print out some info about the roles
 print("# of role:fid pairs: " + str(len(role_fid_pairs)) + "\n")
 print("# of fids linked to functional roles: " + str(len(feature_hash)))
