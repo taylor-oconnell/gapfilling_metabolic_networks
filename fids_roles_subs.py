@@ -39,9 +39,9 @@ for fid in feature_hash:
         sub = lst[1]
 
         # Write role:fid:seq to file
-        #if (role,fid) not in role_fid_pairs:
-        role_fid_pairs.append((role,fid))
-        fout.write(role + "\t" + fid + "\t" + fids_seqs[fid] + "\n")
+        if (role,fid) not in role_fid_pairs:
+            role_fid_pairs.append((role,fid))
+            fout.write(role + "\t" + fid + "\t" + fids_seqs[fid] + "\n")
             
         # Get the roles and subs per fid and get all of the roles and subs present           
         roles4fid.append(role)
@@ -54,15 +54,17 @@ for fid in feature_hash:
     
 fout.close()
 
-
-print("length of feature hash: " + str(len(feature_hash)))
+# Print out some info about the roles
+print("# of fids linked to functional roles: " + str(len(feature_hash)))
 print("# of roles that have fids associated: " + str(len(set(roles_w_fids))))
-print("# of subsystems that have fids associated: " + str(len(set(subs_w_fids))))
+print("# of subsystems that have fids associated: " + str(len(set(subs_w_fids))) + "\n")
 
 print("max # of roles per fid: " + str(max(roles_per_fid.values())))
-print("min # of roles per fid: " + str(min(roles_per_fid.values())))
+print("avg # of roles per fid: " + str(sum(roles_per_fid.values())/float(len(roles_per_fid.values()))))
+print("min # of roles per fid: " + str(min(roles_per_fid.values())) + "\n")
 
 print("max # of subsystems per fid: " + str(max(subs_per_fid.values())))
+print("avg # of subsystems per fid: " + str(sum(subs_per_fid.values())/float(len(subs_per_fid.values()))))
 print("min # of subsystems per fid: " + str(min(subs_per_fid.values())))
 
 # Create histogram of roles per fid and subsystems per fid
