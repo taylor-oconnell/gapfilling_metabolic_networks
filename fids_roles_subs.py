@@ -87,6 +87,25 @@ plt.xlabel('Number of Subsystems')
 plt.ylabel('Count')
 plt.title('Subsystems per fid')
 plt.show()
+
+# Get all the associated roles for each of the annotated subsystems
+subs_roles = server.subsystem_roles({"-ids":list(set(subs_w_fids))})
+sub_score = {}
+for s in subs_roles:
+    tot_roles = len(subs_roles[s])
+    count = 0
+    for i in subs_roles[s]:
+        if i in list(set(roles_w_fids)):
+            count = count + 1
+    sub_score[s] = float(count) / tot_roles
+
+plt.hist(sub_score.values(), bins = 10)
+plt.xlabel('Fraction of roles from subsystem present')
+plt.ylabel('Count')
+plt.title('Subsystem Completeness')
+plt.show()
+
     
+        
     
 
