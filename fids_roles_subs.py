@@ -55,6 +55,7 @@ for fid in feature_hash:
 fout.close()
 
 # Print out some info about the roles
+print("# of role:fid pairs: " + str(len(role_fid_pairs)) + "\n")
 print("# of fids linked to functional roles: " + str(len(feature_hash)))
 print("# of roles that have fids associated: " + str(len(set(roles_w_fids))))
 print("# of subsystems that have fids associated: " + str(len(set(subs_w_fids))) + "\n")
