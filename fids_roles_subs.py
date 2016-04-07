@@ -11,36 +11,49 @@ genomeID = '83333.1'
 fin = open('pegs_and_seqs.txt', 'r')
 fids_seqs = {}
 for line in fin:
-    fields = line.strip().split()
+    fields = line.strip().split("\t")
     fids_seqs[fields[0]] = fields[1]
 fin.close()
 print("# of fids: " + str(len(fids_seqs)))
 
-# Write out the role:fid:sequence to a text file
-#fout = open('role_peg_seq.txt', 'w')
+# Create file to write out the role:fid:sequence to text file
+fout = open('role_peg_seq.txt', 'w')
 
 # Get the roles and subsystems for all of the fids    
 feature_hash = server.ids_to_subsystems({"-ids": fids_seqs.keys(), "-genome": genomeID})
 
+# Some variables four counting roles and subsystems
+role_fid_pairs = []
 roles_w_fids = []
 subs_w_fids = []
 roles_per_fid = {}
 subs_per_fid = {}
 
+
 for fid in feature_hash:
-    roles_per_fid[fid] = len(feature_hash[fid]) # count roles per fid
-    subs4role = []
-    
+    roles4fid = []
+    subs4fid = []
+
     for lst in feature_hash[fid]:
-        subs4role.append(lst[1])
-        roles_w_fids.append(lst[0])
-        subs_w_fids.append(lst[1])
+        role = lst[0]
+        sub = lst[1]
+
         # Write role:fid:seq to file
-        #fout.write(lst[1] + "\t" + fid + "\t" + fids_seqs[fid] + "\n")
+        #if (role,fid) not in role_fid_pairs:
+        role_fid_pairs.append((role,fid))
+        fout.write(role + "\t" + fid + "\t" + fids_seqs[fid] + "\n")
+            
+        # Get the roles and subs per fid and get all of the roles and subs present           
+        roles4fid.append(role)
+        subs4fid.append(sub)
+        roles_w_fids.append(role)
+        subs_w_fids.append(sub)
         
-    subs_per_fid[fid] = len(set(subs4role))
+    roles_per_fid[fid] = len(set(roles4fid)) # count roles per fid
+    subs_per_fid[fid] = len(set(subs4fid))   # count subsystems per fid
     
-#fout.close()
+fout.close()
+
 
 print("length of feature hash: " + str(len(feature_hash)))
 print("# of roles that have fids associated: " + str(len(set(roles_w_fids))))
@@ -53,14 +66,14 @@ print("max # of subsystems per fid: " + str(max(subs_per_fid.values())))
 print("min # of subsystems per fid: " + str(min(subs_per_fid.values())))
 
 # Create histogram of roles per fid and subsystems per fid
-plt.hist(roles_per_fid.values(), bins = 10)
+plt.hist(roles_per_fid.values(), bins = 4)
 plt.xlabel('Number of Functional Roles')
-plt.ylabel('Frequency')
+plt.ylabel('Count')
 plt.title('Functional Roles per fid')
 plt.show()
-plt.hist(subs_per_fid.values(), bins = 10)
+plt.hist(subs_per_fid.values(), bins = 8)
 plt.xlabel('Number of Subsystems')
-plt.ylabel('Frequency')
+plt.ylabel('Count')
 plt.title('Subsystems per fid')
 plt.show()
     
