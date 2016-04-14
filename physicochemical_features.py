@@ -6,6 +6,7 @@ fids.
 
 import sys
 import os.path
+import pickle
 from  calculate_physicochemical_features import calculate_pI, calculate_MW, calculate_secondary_structure_fraction, calculate_aa_composition
 
 roles = []
@@ -36,6 +37,7 @@ firstFive = pI.keys()[:5]
 for i in firstFive:
     print(i + "\t" + str(pI[i]))
 print("\n")
+pickle.dump(pI, open("pI.p", "wb"))
 
 # Calculate the molecular weights
 MW = calculate_MW(fids_seqs)
@@ -43,6 +45,7 @@ firstFive = MW.keys()[:5]
 for i in firstFive:
     print(i + "\t" + str(MW[i]))
 print("\n")
+pickle.dump(MW, open("MW.p", "wb"))
 
 # Calculate the secondary structure fraction
 ssf = calculate_secondary_structure_fraction(fids_seqs)
@@ -50,6 +53,7 @@ firstFive = ssf.keys()[:5]
 for i in firstFive:
     print(i + "\t" + str(ssf[i]))
 print("\n")
+pickle.dump(ssf, open("ssf.p", "wb"))
 
 # Calculate the amino acid composition
 aac = calculate_aa_composition(fids_seqs)
@@ -57,6 +61,7 @@ firstFive = aac.keys()[:5]
 for i in firstFive:
     print(i + "\t" + str(aac[i]))
 print("\n")
+pickle.dump(aac, open("aac.p", "wb"))
 
 
     
